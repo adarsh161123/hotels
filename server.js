@@ -18,6 +18,7 @@ app.use(routes);
 // app.get('/', (req, res) => {
 //   res.send('Hello World')
 // })
+//routes for person
 app.use('/person',routes);
 
 // app.get('/person',routes);
