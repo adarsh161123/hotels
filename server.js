@@ -1,0 +1,43 @@
+var fs = require('fs');
+var os = require('os');
+var notes = require('./note.js');
+var _ = require('lodash');
+var db = require('./db.js');
+const Person = require('./models/person.js');
+
+var express = require('express');   
+const app = express()
+const routes = require('./routes/personroute.js');
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(routes);
+
+
+
+
+// app.get('/', (req, res) => {
+//   res.send('Hello World')
+// })
+app.use('/person',routes);
+
+// app.get('/person',routes);
+// app.post('/person',routes);
+// app.put('/person/:id',routes);
+// app.delete('/person/:id',routes);
+
+
+
+
+
+
+       
+
+
+
+app.listen(5000, () => {
+  console.log('Server is running on http://localhost:3000')
+})
+
+
+
+
