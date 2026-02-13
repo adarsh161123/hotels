@@ -1,5 +1,8 @@
 const monogoose = require('mongoose');
-const monogourl = 'mongodb://localhost:27017/hotels';
+require('dotenv').config();
+// const monogourl = 'mongodb://localhost:27017/hotels';
+// const monogourl = process.env.MONGODB_URI_LOCAL;
+const monogourl = process.env.MONGODB_URI;
 
 monogoose.connect(monogourl, {
     useNewUrlParser: true,

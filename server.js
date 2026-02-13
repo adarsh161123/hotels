@@ -4,6 +4,7 @@ var notes = require('./note.js');
 var _ = require('lodash');
 var db = require('./db.js');
 const Person = require('./models/person.js');
+require('dotenv').config();
 
 var express = require('express');   
 const app = express()
@@ -33,9 +34,9 @@ app.use('/person',routes);
 
        
 
+const port = process.env.Port || 5000;
 
-
-app.listen(5000, () => {
+app.listen(port, () => {
   console.log('Server is running on http://localhost:3000')
 })
 
