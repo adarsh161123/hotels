@@ -4,7 +4,7 @@ const Person = require("../models/person.js");
 // const bodyParser = require('body-parser');
 // router.use(bodyParser.json());
 
-router.post("/person", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     console.log("Request body:", req.body);
     const data = req.body;
@@ -19,7 +19,7 @@ router.post("/person", async (req, res) => {
   }
 });
 
-router.get("/person", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const people = await Person.find({});
     res.status(200).send(people);

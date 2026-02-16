@@ -1,4 +1,5 @@
 const monogoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const personSchema = new monogoose.Schema({
     name: {
@@ -30,9 +31,31 @@ const personSchema = new monogoose.Schema({
     salary: {
         type: Number,
         required: true
+    },
+    username: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
     }
+
 }); 
 
+personSchema.pre('save', async function(next) {
+    if (this.isModified('password') || this.isNew) {
+        try {
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+            next();
+        } catch (err) {
+            next(err);
+        }   
+    } else {
+        next();
+    }
+});
 const Person = monogoose.model('Person', personSchema);
 
 module.exports = Person;
