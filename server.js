@@ -4,14 +4,17 @@ var notes = require('./note.js');
 var _ = require('lodash');
 var db = require('./db.js');
 const Person = require('./models/person.js');
+const Hotel = require('./models/hotel.js');
 require('dotenv').config();
 
 var express = require('express');   
 const app = express()
 const routes = require('./routes/personroute.js');
+const hotelRoutes = require('./routes/hotelroute.js');
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(routes);
+app.use(hotelRoutes);
 
 
 
@@ -21,6 +24,7 @@ app.use(routes);
 // })
 //routes for person
 app.use('/person',routes);
+app.use('/hotel', hotelRoutes);
 
 // app.get('/person',routes);
 // app.post('/person',routes);
