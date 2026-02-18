@@ -1,25 +1,65 @@
 const express = require("express");
 const router = express.Router();
 const Person = require("../models/person.js");
+const {jwtAuthMiddleware,generateToken} = require("../jwt.js");
 // const bodyParser = require('body-parser');
 // router.use(bodyParser.json());
 
-router.post("/", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     console.log("Request body:", req.body);
     const data = req.body;
     const person = new Person(data);
-    await person.save();
+    const response = await person.save();
 
-    res.status(201).send(person);
+    const payload = {
+      id: response._id,
+      username: response.username,
+    };
 
-    console.log("Person saved successfully");
+           const token = generateToken(payload);
+    res.status(201).json({ response:response, token: token });
+
+    console.log("Person saved successfully",response);
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
 });
 
-router.get("/", async (req, res) => {
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const person = await Person.findOne({ username: username });
+    if (!person || person.password !== password ) {
+      return res.status(400).json({ error: "Invalid username or password" });
+    } 
+        
+    const payload = {
+      id: person._id,
+      username: person.username,
+    };      
+
+    const token = generateToken(payload);
+    res.status(200).json({ token: token });
+    console.log("Login successful",person);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+
+router.get("/profile", jwtAuthMiddleware, async (req, res) => {
+  try {
+    const person = await Person.findById(req.user.id);
+    if (!person) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json({ profile: person });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+
+router.get("/", jwtAuthMiddleware, async (req, res) => {
   try {
     const people = await Person.find({});
     res.status(200).send(people);
